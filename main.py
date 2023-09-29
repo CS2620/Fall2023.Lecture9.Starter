@@ -6,6 +6,8 @@ from container import Container
 from layer import Layer
 import cProfile
 import time
+import math
+import numpy as np
 
 
 def main():
@@ -49,7 +51,7 @@ def main():
     # layer1.scale_backward(2,2)
     # layer1.scale_forward(2,2)
     # layer1.scale_forward(1.1,1.1)    
-    layer1.rotate(.1)
+    layer1.rotate(math.pi)
 
     container.save("done.png")
 

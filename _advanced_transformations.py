@@ -69,8 +69,8 @@ def scale_forward(self, dx, dy):
     self.height = new_height
 
 def interpolate_nearest_neighbor(self, x, y):
-    from_x = math.floor(x)
-    from_y = math.floor(y)
+    from_x = math.floor(x + .5)
+    from_y = math.floor(y + .5)
     if from_x < 0 or from_x >= self.width or from_y < 0 or from_y >= self.height:
         return None
     pixel_index = self.pixelIndex(from_x, from_y)
@@ -116,8 +116,6 @@ def interpolate_bilinear(self, x, y):
     left = 1-x_percent
     up = 1 - y_percent
 
-    
-
     top = (
         color_UL[0]*(left)+color_UR[0]*x_percent, 
         color_UL[1]*(left)+color_UR[1]*x_percent, 
@@ -139,8 +137,8 @@ def interpolate_bilinear(self, x, y):
     return color
 
 def rotate(self, theta):
-    new_width = self.width*2
-    new_height = self.height*2
+    new_width = self.width
+    new_height = self.height
     new_pixels = [0, 0, 0] * new_width * new_height
     for y in range(new_height):
         for x in range(new_width):
@@ -149,14 +147,18 @@ def rotate(self, theta):
             to_pixel_y = y
             to_pixel_index = to_pixel_y*new_width + to_pixel_x
 
-            to_radius = math.sqrt(to_pixel_x**2 + to_pixel_y**2)
-            to_theta = math.atan2(to_pixel_y, to_pixel_x)
+            mx, my = new_width/2, new_height/2
+
+            # to_radius = math.sqrt((to_pixel_x-mx)**2 + (to_pixel_y-my)**2)
+            # to_theta = math.atan2((to_pixel_y-my), (to_pixel_x-mx))
+            to_radius = math.sqrt((to_pixel_x-mx)**2 + (to_pixel_y-my)**2)
+            to_theta = math.atan2((to_pixel_y-my), (to_pixel_x-mx))
             from_radius = to_radius
             from_theta = to_theta - theta
-            from_x = math.cos(from_theta) * from_radius
-            from_y = math.sin(from_theta) * from_radius
-            # from_color = self.interpolate_nearest_neighbor(from_x,from_y)
-            from_color = self.interpolate_bilinear(from_x, from_y)
+            from_x = math.cos(from_theta) * from_radius + mx
+            from_y = math.sin(from_theta) * from_radius + my
+            from_color = self.interpolate_nearest_neighbor(from_x,from_y)
+            #from_color = self.interpolate_bilinear(from_x, from_y)
 
             if from_color:
                 new_pixels[to_pixel_index] = from_color
