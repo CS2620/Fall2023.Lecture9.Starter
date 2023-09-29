@@ -10,6 +10,7 @@ import time
 
 def main():
     print("Start")
+    
 
     # Open an image, get its size, and access its pixel buffer
 
@@ -23,6 +24,8 @@ def main():
     width = image.size[0]
     height = image.size[1]
 
+    
+
     """ Building a container for the image"""
     container:Container = Container(width,height)
 
@@ -30,13 +33,12 @@ def main():
     layer1:Layer = Layer(width, height, 0, 0)
     container.add_layer(layer1)
 
-
+    
     """ Loop through all the layer(s) and give them their colors"""
-    for y in range(height):
-        for x in range(width):
-            pixel = bridge_buffer[x, y]
+    layer1.pixels = list(image.getdata())
+    
 
-            layer1.set_pixel(x, y, pixel)
+    
 
 
     """ Choose a custom transformation """
@@ -49,12 +51,11 @@ def main():
     # layer1.scale_forward(1.1,1.1)    
     layer1.rotate(.1)
 
-
     container.save("done.png")
 
 start = time.time()
-# main()
-cProfile.run("main()", "c:/tmp/tmp.prof")
+main()
+#cProfile.run("main()", "c:/tmp/tmp.prof")
 end = time.time()
 print(str(end - start) + " " + " seconds")
 

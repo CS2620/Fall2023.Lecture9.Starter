@@ -155,8 +155,8 @@ def rotate(self, theta):
             from_theta = to_theta - theta
             from_x = math.cos(from_theta) * from_radius
             from_y = math.sin(from_theta) * from_radius
-            from_color = self.interpolate_nearest_neighbor(from_x,from_y)
-            # from_color = self.interpolate_bilinear(from_x, from_y)
+            # from_color = self.interpolate_nearest_neighbor(from_x,from_y)
+            from_color = self.interpolate_bilinear(from_x, from_y)
 
             if from_color:
                 new_pixels[to_pixel_index] = from_color

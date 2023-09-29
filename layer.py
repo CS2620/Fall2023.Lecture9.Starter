@@ -27,7 +27,7 @@ class Layer:
     def set_pixel(self, x, y, color) -> None:
         """Set a pixel in the layer buffer"""
         index = self.pixelIndex(x, y)
-        self.pixels[index] = color
+        self.pixels[y*self.width+x] = color
 
     def get_pixel(self, x: int, y: int):
         """ Given x and y, return the color of the pixel"""
