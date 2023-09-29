@@ -92,8 +92,8 @@ def color_at(self, x, y):
 def interpolate_bilinear(self, x, y):
     fx = math.floor(x)
     fy = math.floor(y)
-    fx_1 = math.floor(x+1)
-    fy_1 = math.floor(y+1)
+    fx_1 = fx+1
+    fy_1 = fy+1
 
     
     ul_x, ul_y = fx, fy
@@ -133,7 +133,7 @@ def interpolate_bilinear(self, x, y):
         math.floor(top[2]*(up) + bottom[2]*y_percent),
     )
 
-    return (0,0,255)
+    # return (0,0,255)
     
 
     return color
@@ -155,8 +155,8 @@ def rotate(self, theta):
             from_theta = to_theta - theta
             from_x = math.cos(from_theta) * from_radius
             from_y = math.sin(from_theta) * from_radius
-            # from_color = self.interpolate_nearest_neighbor(from_x,from_y)
-            from_color = self.interpolate_bilinear(from_x, from_y)
+            from_color = self.interpolate_nearest_neighbor(from_x,from_y)
+            # from_color = self.interpolate_bilinear(from_x, from_y)
 
             if from_color:
                 new_pixels[to_pixel_index] = from_color
