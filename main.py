@@ -20,6 +20,7 @@ def main():
     # image = Image.open("./helpers/Debug1.png")
     # image = Image.open("./helpers/DebugTiny.png")
     image = Image.open("./images/address.jpg")
+    # image = Image.open("./images/band_small.png")
 
     """ Load the image and get its height and width"""
     bridge_buffer = image.load()
@@ -51,7 +52,9 @@ def main():
     # layer1.scale_backward(2,2)
     # layer1.scale_forward(2,2)
     # layer1.scale_forward(1.1,1.1)    
-    layer1.rotate(math.pi)
+    # layer1.rotate_same_size(math.pi/4)
+    layer1.rotate_expand(math.pi/10)
+    # layer1.rotate_shrink(math.pi/3)
 
     container.save("done.png")
 

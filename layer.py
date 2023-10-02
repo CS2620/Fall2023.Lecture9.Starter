@@ -12,10 +12,14 @@ class Layer:
     from _advanced_transformations import color_at
     from _advanced_transformations import interpolate_bilinear
     from _advanced_transformations import interpolate_nearest_neighbor
-    from _advanced_transformations import rotate
+    from _advanced_transformations import rotate_same_size
     from _advanced_transformations import scale_backward
     from _advanced_transformations import scale_forward
     from _advanced_transformations import translate
+    from _advanced_transformations import get_rotation_matrix
+    from _advanced_transformations import get_rotation_matrix_two
+    from _advanced_transformations import rotate_expand
+
 
 
     def __init__(self, width: int, height: int, offset_x: float, offset_y: float):

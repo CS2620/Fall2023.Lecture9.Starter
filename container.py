@@ -20,7 +20,14 @@ class Container:
     Args:
       layer (Layer): The layer to add to the container
     """
+    layer.parent = self
     self.layers.append(layer)
+
+  def resize(self, width, height):
+    self.width, self.height = width, height
+    self.image = Image.new("RGB", (width, height))
+    self.buffer = self.image.load()
+    
 
   def save(self, filename):
     """
