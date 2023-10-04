@@ -13,7 +13,6 @@ import numpy as np
 def main():
     print("Start")
     
-
     # Open an image, get its size, and access its pixel buffer
 
     """ There are multiple lines here to ease debugging"""
@@ -23,11 +22,8 @@ def main():
     # image = Image.open("./images/band_small.png")
 
     """ Load the image and get its height and width"""
-    bridge_buffer = image.load()
     width = image.size[0]
     height = image.size[1]
-
-    
 
     """ Building a container for the image"""
     container:Container = Container(width,height)
@@ -40,9 +36,6 @@ def main():
     """ Loop through all the layer(s) and give them their colors"""
     layer1.pixels = list(image.getdata())
     
-
-    
-
 
     """ Choose a custom transformation """
     # layer1.flip_horizontal_axis()
