@@ -52,10 +52,9 @@ def main():
     # layer1.scale_backward(2,2)
     # layer1.scale_forward(2,2)
     # layer1.scale_forward(1.1,1.1)    
-    # layer1.rotate_same_size(math.pi/4)
-    layer1.rotate_expand(math.pi/10)
-    # layer1.rotate_shrink(math.pi/3)
-
+    layer1.rotate_same_size(math.pi/10)
+    # layer1.rotate_expand(math.pi/3)
+    
     container.save("done.png")
 
 start = time.time()

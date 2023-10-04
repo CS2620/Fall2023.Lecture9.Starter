@@ -88,79 +88,50 @@ def color_at(self, x, y):
     
 
 def interpolate_bilinear(self, x, y):
-    fx = math.floor(x)
-    fy = math.floor(y)
-    fx_1 = fx+1
-    fy_1 = fy+1
-
-    ul_x, ul_y = fx, fy
-    ur_x, ur_y = fx_1, fy
-    ll_x, ll_y = fx, fy_1
-    lr_x, lr_y = fx_1, fy_1
-
-    color_UL = self.color_at(ul_x, ul_y)
-    color_UR = self.color_at(ur_x, ur_y)
-    color_LL = self.color_at(ll_x, ll_y)
-    color_LR = self.color_at(lr_x, lr_y)
-
-    x_percent = math.modf(x)[0]
-    y_percent = math.modf(y)[0]
-
-    left = 1-x_percent
-    up = 1 - y_percent
-
-    top = (
-        color_UL[0]*(left)+color_UR[0]*x_percent, 
-        color_UL[1]*(left)+color_UR[1]*x_percent, 
-        color_UL[2]*(left)+color_UR[2]*x_percent)
-    bottom = (
-        color_LL[0]*(1-x_percent)+color_LR[0]*x_percent, 
-        color_LL[1]*(1-x_percent)+color_LR[1]*x_percent, 
-        color_LL[2]*(1-x_percent)+color_LR[2]*x_percent)
+    # Get the percent in x and y
     
-    color = (
-        math.floor(top[0]*(up) + bottom[0]*y_percent),
-        math.floor(top[1]*(up) + bottom[1]*y_percent),
-        math.floor(top[2]*(up) + bottom[2]*y_percent),
-    )
+    # Get the x and y value of the pixels before and after
+    
+    # Get the x and y values of the four surrounding pixels
+    
+    # use self.color_at to get these four pixels
 
-    # return (0,0,255)
-    return color
+    # Calculate the top interpolation
+    
+    # Calculate the bottom interpolation
 
-def get_rotation_matrix(self, new_width, new_height, theta):
+    # Calculate the final interpolation
+
+    # This is just a placeholder
+    return (0,0,255)
+    #return color
+
+def get_in_place_matrix(self, new_width, new_height, theta):
     translation = np.identity(3)
-    translation[0,2] = -new_width/2
-    translation[1,2] = -new_height/2
+    # translation[0,2] = -new_width/2
+    # translation[1,2] = -new_height/2
 
     rotation = np.identity(3)
-    rotation[0,0] = math.cos(-theta)
-    rotation[0,1] = -math.sin(-theta)
-    rotation[1,0] = math.sin(-theta)
-    rotation[1,1] = math.cos(-theta)
+    # rotation[0,0] = math.cos(-theta)
+    # rotation[0,1] = -math.sin(-theta)
+    # rotation[1,0] = math.sin(-theta)
+    # rotation[1,1] = math.cos(-theta)
 
     untranslation = np.identity(3)
-    untranslation[0,2] = new_width/2
-    untranslation[1,2] = new_height/2
+    # untranslation[0,2] = new_width/2
+    # untranslation[1,2] = new_height/2
 
     first_half = np.matmul(rotation, translation)
     combined = np.matmul(untranslation, first_half)
     return combined
 
-def get_rotation_matrix_two(self, new_width, new_height, theta, offset_x, offset_y):
+def get_expanded_matrix(self, new_width, new_height, theta, offset_x, offset_y):
     translation = np.identity(3)
-    translation[0,2] = -new_width/2
-    translation[1,2] = -new_height/2
-
+    
     rotation = np.identity(3)
-    rotation[0,0] = math.cos(-theta)
-    rotation[0,1] = -math.sin(-theta)
-    rotation[1,0] = math.sin(-theta)
-    rotation[1,1] = math.cos(-theta)
-
+    
     untranslation = np.identity(3)
-    untranslation[0,2] = new_width/2+offset_x
-    untranslation[1,2] = new_height/2+offset_y
-
+    
     first_half = np.matmul(rotation, translation)
     combined = np.matmul(untranslation, first_half)
     return combined
@@ -170,7 +141,7 @@ def rotate_same_size(self, theta):
     new_height = self.height
     new_pixels = [0, 0, 0] * new_width * new_height
 
-    combined = self.get_rotation_matrix(new_width, new_height, theta)
+    combined = self.get_in_place_matrix(new_width, new_height, theta)
 
     for y in range(new_height):
         for x in range(new_width):
@@ -186,7 +157,7 @@ def rotate_same_size(self, theta):
             from_y = transformed[1]
 
             from_color = self.interpolate_nearest_neighbor(from_x,from_y)
-            from_color = self.interpolate_bilinear(from_x, from_y)
+            #from_color = self.interpolate_bilinear(from_x, from_y)
 
             if from_color:
                 new_pixels[to_pixel_index] = from_color
@@ -200,39 +171,33 @@ def rotate_expand(self, theta):
     new_height = self.height
     new_pixels = [0, 0, 0] * new_width * new_height
 
-    combined = self.get_rotation_matrix(new_width, new_height, theta)
+    combined = self.get_in_place_matrix(new_width, new_height, theta)
 
-    ul = np.matmul(combined, np.array([0,0,1]))
-    ur = np.matmul(combined, np.array([self.width,0,1]))
-    ll = np.matmul(combined, np.array([0,self.height,1]))
-    lr = np.matmul(combined, np.array([self.width,self.height,1]))
+    # ul = np.matmul(combined, np.array([0,0,1]))
+    # ur = np.matmul(combined, np.array([self.width,0,1]))
+    # ll = np.matmul(combined, np.array([0,self.height,1]))
+    # lr = np.matmul(combined, np.array([self.width,self.height,1]))
 
-    corners = [ul, ur, ll, lr]
+    # corners = [ul, ur, ll, lr]
 
-    max_x = max(map(lambda two:two[0], corners))
-    min_x = min(map(lambda two:two[0], corners))
+    # max_x = max(map(lambda two:two[0], corners))
+    # min_x = min(map(lambda two:two[0], corners))
 
-    max_y = max(map(lambda two:two[1], corners))
-    min_y = min(map(lambda two:two[1], corners))
+    # max_y = max(map(lambda two:two[1], corners))
+    # min_y = min(map(lambda two:two[1], corners))
 
-    rotated_width = max_x - min_x
-    rotated_height = max_y - min_y
+    # rotated_width = max_x - min_x
+    # rotated_height = max_y - min_y
 
-    offset_x = rotated_width - new_width
-    offset_y = rotated_height - new_height
+    # new_width = math.ceil(rotated_width)
+    # new_height = math.ceil(rotated_height)
+    # new_pixels = [0, 0, 0] * new_width * new_height
 
-    new_width = math.ceil(rotated_width)
-    new_height = math.ceil(rotated_height)
-    new_pixels = [0, 0, 0] * new_width * new_height
-
-    self.parent.resize(new_width,new_height)
-    combined = self.get_rotation_matrix_two(new_width, new_height, theta, min_x, min_y)
-
-
+    # self.parent.resize(new_width,new_height)
+    # combined = self.get_expanded_matrix(new_width, new_height, theta, min_x, min_y)
 
     for y in range(new_height):
         for x in range(new_width):
-            
             to_pixel_x = x
             to_pixel_y = y
             to_pixel_index = to_pixel_y*new_width + to_pixel_x
@@ -244,7 +209,7 @@ def rotate_expand(self, theta):
             from_y = transformed[1]
 
             from_color = self.interpolate_nearest_neighbor(from_x,from_y)
-            from_color = self.interpolate_bilinear(from_x, from_y)
+            #from_color = self.interpolate_bilinear(from_x, from_y)
 
             if from_color:
                 new_pixels[to_pixel_index] = from_color

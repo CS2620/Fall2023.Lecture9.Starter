@@ -16,8 +16,8 @@ class Layer:
     from _advanced_transformations import scale_backward
     from _advanced_transformations import scale_forward
     from _advanced_transformations import translate
-    from _advanced_transformations import get_rotation_matrix
-    from _advanced_transformations import get_rotation_matrix_two
+    from _advanced_transformations import get_in_place_matrix
+    from _advanced_transformations import get_expanded_matrix
     from _advanced_transformations import rotate_expand
 
 
